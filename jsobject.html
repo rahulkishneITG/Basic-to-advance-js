@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS object</title>
+</head>
+
+<body>
+
+    <script>
+        let person = {
+            firstname: 'John',
+            lastName: "Doe",
+            age: 30,
+        }
+        document.write("Access values of person object by (.):-", person.firstname, "<br>");
+        document.write("Access values of person object by indexing:-", person['lastName'], "<br>");
+
+        let otherObj = new Object();
+        otherObj.name = 'Jane';
+        document.write("Created By Object Keyword:-", otherObj.name, "<br>");
+
+        document.write("Keys of the person object: ", Object.keys(person).join(", "), "<br>");
+
+        document.write("Values of the person object: ", Object.values(person).join(", "), "<br>");
+
+        document.write("Key-Value pairs of the person object:<br>");
+        Object.entries(person).forEach(([key, value]) => {
+            document.write(`${key}: ${value}<br>`);
+        });
+
+        delete person.age;
+        document.write("after delete person.age:-", "<br>");
+        Object.entries(person).forEach(([key, value]) => {
+            document.write(`${key}: ${value}<br>`);
+        });
+
+        person.fullname = function () {
+            return this.firstname + " " + this.lastName;
+        }
+        document.write("Full name of person via object method:-", person.fullname(), "<br>");
+
+        document.write("display using json stringify:-", JSON.stringify(person), "<br>");
+
+        function newPerson(firstname, lastname, age) {
+            this.firstname = firstname;
+            this.lastName = lastname;
+            this.age = age;
+        }
+        const me = new newPerson("Rahul", "Kishne", 24);
+        const myfriend = new newPerson("Himansh", "Soni", 24);
+
+        document.write("Object Constructor:-", JSON.stringify(me), "<br>");
+        document.write("Object Constructor:-", JSON.stringify(myfriend), "<br>");
+
+        newPerson.prototype.fullname = function () {
+            return this.firstname + " " + this.lastName;
+        }
+
+        document.write("Object Constructor after adding function in constructor:-", JSON.stringify(me), "<br>");
+        document.write("Object Constructor after adding function in constructor:-", JSON.stringify(myfriend), "<br>");
+
+        newPerson.prototype.changeName = function (fname) {
+            this.firstname = fname;
+        }
+
+        myfriend.changeName("Praveen");
+
+        document.write("Object Constructor Changing name using object created by constructor and call direct function:-", JSON.stringify(myfriend), "<br>");
+
+        const a = {
+            name: "rahul kishne",
+            email: "rahul@gmai.com",
+            address: "dewas,india"
+        }
+        const b = {
+            name: "rohit raj",
+            address: "indore,india"
+        }
+        Object.assign(a, b);
+        document.write("Object assign method use:-", JSON.stringify(a), "<br>");
+
+        let convertToArray = Object.entries(a);
+        document.write("Object entries method use:-", JSON.stringify(convertToArray), "<br>");
+        document.write("Object fromEntries method use:-", JSON.stringify(Object.fromEntries(convertToArray)), "<br>");
+
+
+        const persons = [
+            { name: "rahul", age: "24" },
+            { name: "rohit", age: "25" },
+            { name: "praveen", age: "20" },
+            { name: "himanshu", age: "21" },
+            { name: "mahima", age: "26" },
+        ];
+
+        function myfun({ age }) {
+            return age > 22 ? "eligible" : "noteligible";
+        }
+        let result = Object.groupBy(persons, myfun);
+
+        let text = "These age are eligible: <br>";
+        for (let [x, y] of result.eligible.entries()) {
+            text += y.name + " " + y.age + "<br>";
+        }
+
+        text += "<br>These age are not eligible: <br>";
+        for (let [x, y] of result.noteligible.entries()) {
+            text += y.name + " " + y.age + "<br>";
+        }
+        document.write("Object groupby method use:-", text, "<br>");
+
+        Object.defineProperty(a, "year", {value:"2008"});
+
+        document.write("Object define method use:-", a.year, "<br>");
+        document.write("Object getOwnPropertyNames method use:-", Object.getOwnPropertyNames(a), "<br>");
+    </script>
+</body>
+
+</html>
