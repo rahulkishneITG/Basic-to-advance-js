@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Tasks</title>
+</head>
+<body>
+    <script>
+        // task 1:- isi array me se kon sa number kitni bar aaya he ye bhi check krna he 
+        
+        let arr = [4,4,4,2,2,2,8,4,4,7,7,7,582,753,951,654,0.2,0.5,.5,.6,.2, 0,1,2,4,7,88,99,77,44,55,88,77,99,0,22,.55,66,77,951,753,850];
+
+        let sortingArr = arr.sort((a, b) => a - b);
+        let count = 0;
+        let occurrences = {};
+
+        for (let i = 0; i < sortingArr.length; i++) {
+            count = 1;
+            while (i < sortingArr.length - 1 && sortingArr[i] === sortingArr[i + 1]) {
+                count++;
+                i++;
+            }
+            occurrences[sortingArr[i]] = count;
+        }
+        for (let [key, value] of Object.entries(occurrences)) {
+            console.log(`${key} : ${value}`);
+            document.write(`${key} : ${value}<br>`);
+        }
+
+        // task 2:- upar diye gye array me se 3 sabse bade number or 3 sabse chote numer nikalne he 
+        let unique = sortingArr.filter((item, i, sortingArr) => sortingArr.indexOf(item) === i); 
+        let uniqueArrLength = unique.length;
+        console.log(sortingArr)
+        for(let i =0 ; i<uniqueArrLength; i++){
+            if(i<3){
+                document.write("sabse chote numbers:",`${unique[i]}`,"<br>")
+            }
+            else if(i == uniqueArrLength-1 || i == uniqueArrLength-2 || i == uniqueArrLength-3){
+                document.write("sabse bade numbers:",`${unique[i]}`,"<br>");
+            }
+        }
+    </script>
+</body>
+</html>

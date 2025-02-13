@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array JS</title>
+</head>
+
+<body>
+    <script>
+        // Basic Array Creation
+        document.write("Creating an array: <br>");
+        let array = [1, 2, 3, 4, 5];
+        document.write("Array: " + array + "<br><br>");
+
+        // Accessing Array Elements
+        document.write("Accessing first and last elements: <br>");
+        document.write("First element: " + array[0] + "<br>");
+        document.write("Last element: " + array[4] + "<br><br>");
+
+        // Array Length
+        document.write("Array length: <br>");
+        document.write("Length: " + array.length + "<br><br>");
+
+        // Adding Elements to an Array
+        document.write("Adding elements to the array: <br>");
+        array.push(6);
+        document.write("After push(6): " + array + "<br>");
+
+        array.unshift(0);
+        document.write("After unshift(0): " + array + "<br><br>");
+
+        // Removing Elements from an Array
+        document.write("Removing elements from the array: <br>");
+        array.pop();
+        document.write("After pop(): " + array + "<br>");
+
+        array.shift();
+        document.write("After shift(): " + array + "<br><br>");
+
+        // Splicing Array Elements
+        document.write("Splicing elements from the array: <br>");
+        array.splice(2, 1);
+        document.write("After splice(2, 1): " + array + "<br>");
+
+        array.splice(2, 0, 10);
+        document.write("After splice(2, 0, 10): " + array + "<br><br>");
+
+        // Slicing Array
+        document.write("Slicing part of the array: <br>");
+        let newArray = array.slice(1, 3);
+        document.write("Sliced array: " + newArray + "<br><br>");
+
+        // Looping through Array
+        document.write("Looping through the array: <br>");
+        for (let i = 0; i < array.length; i++) {
+            document.write(array[i] + "<br>");
+        }
+        document.write("<br>");
+
+        // forEach Method
+        document.write("Using forEach method: <br>");
+        array.forEach(function (element) {
+            document.write(element + "<br>");
+        });
+        document.write("<br>");
+
+        // Map Method
+        document.write("Using map method: <br>");
+        let mappedArray = array.map(function (element) {
+            return element * 2;
+        });
+        document.write("Mapped array: " + mappedArray + "<br><br>");
+
+        // Filter Method
+        document.write("Using filter method: <br>");
+        let filteredArray = array.filter(function (element) {
+            return element > 2;
+        });
+        document.write("Filtered array (elements > 2): " + filteredArray + "<br><br>");
+
+        // Reduce Method
+        document.write("Using reduce method: <br>");
+        let sum = array.reduce(function (accumulator, currentValue) {
+            return accumulator + currentValue;
+        }, 0);
+        document.write("Sum of elements: " + sum + "<br><br>");
+
+        // Find Method
+        document.write("Using find method: <br>");
+        let found = array.find(function (element) {
+            return element > 3;
+        });
+        document.write("First element greater than 3: " + found + "<br><br>");
+
+        // Some Method
+        document.write("Using some method: <br>");
+        let hasEven = array.some(function (element) {
+            return element % 2 === 0;
+        });
+        document.write("Does the array contain an even number? " + hasEven + "<br><br>");
+
+        // Every Method
+        document.write("Using every method: <br>");
+        let allEven = array.every(function (element) {
+            return element % 2 === 0;
+        });
+        document.write("Are all elements even? " + allEven + "<br><br>");
+
+        // IndexOf Method
+        document.write("Using indexOf method: <br>");
+        let index = array.indexOf(4);
+        document.write("Index of element 4: " + index + "<br><br>");
+
+        // Includes Method
+        document.write("Using includes method: <br>");
+        let includes = array.includes(3);
+        document.write("Does the array include 3? " + includes + "<br><br>");
+
+        // Concat Method
+        document.write("Using concat method: <br>");
+        let concatenatedArray = array.concat([6, 7, 8]);
+        document.write("Concatenated array: " + concatenatedArray + "<br><br>");
+
+        // Reverse Method
+        document.write("Using reverse method: <br>");
+        array.reverse();
+        document.write("Reversed array: " + array + "<br><br>");
+
+        // Sort Method
+        document.write("Using sort method: <br>");
+        array.sort(function (a, b) {
+            return a - b;
+        });
+        document.write("Sorted array: " + array + "<br><br>");
+
+        // Joining Array Elements
+        document.write("Using join method: <br>");
+        let joined = array.join('-');
+        document.write("Joined array with '-': " + joined + "<br><br>");
+
+        // Flat Method
+        document.write("Using flat method: <br>");
+        let nestedArray = [1, [2, 3], [4, 5]];
+        let flatArray = nestedArray.flat();
+        document.write("Flattened array: " + flatArray + "<br><br>");
+
+        // Array from Method
+        document.write("Using Array.from method: <br>");
+        let arrFromString = Array.from('hello');
+        document.write("Array from string 'hello': " + arrFromString + "<br><br>");
+
+        // Array isArray Method
+        document.write("Using isArray method: <br>");
+        let isArray = Array.isArray(array);
+        document.write("Is 'array' an array? " + isArray + "<br><br>");
+
+        // Fill Method
+        document.write("Using fill method: <br>");
+        let filledArray = new Array(5).fill(1);
+        document.write("Filled array: " + filledArray + "<br><br>");
+
+        // Keys, Values, and Entries Methods
+        document.write("Using keys, values, and entries methods: <br>");
+        for (let key of array.keys()) {
+            document.write("Key: " + key + "<br>");
+        }
+
+        for (let value of array.values()) {
+            document.write("Value: " + value + "<br>");
+        }
+
+        for (let entry of array.entries()) {
+            document.write("Entry: " + entry + "<br>");
+        }
+        document.write("<br>");
+
+        // CopyWithin Method
+        document.write("Using copyWithin method: <br>");
+        let copyArray = array.copyWithin(0, 2, 4);
+        document.write("Array after copyWithin: " + copyArray + "<br><br>");
+
+        // FindIndex Method
+        document.write("Using findIndex method: <br>");
+        let indexOfElement = array.findIndex(function (element) {
+            return element > 3;
+        });
+        document.write("Index of element greater than 3: " + indexOfElement + "<br><br>");
+
+        // Sort with Custom Comparator
+        document.write("Using custom sort comparator: <br>");
+        let customArray = [1, 11, 2, 21, 3];
+        customArray.sort(function (a, b) {
+            return a - b;
+        });
+        document.write("Sorted custom array: " + customArray + "<br>");
+
+    </script>
+</body>
+
+</html>
