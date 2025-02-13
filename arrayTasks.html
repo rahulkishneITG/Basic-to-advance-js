@@ -10,7 +10,7 @@
         // task 1:- isi array me se kon sa number kitni bar aaya he ye bhi check krna he 
 
         let arr = [4,4,4,2,2,2,8,4,4,7,7,7,582,753,951,654,0.2,0.5,.5,.6,.2, 0,1,2,4,7,88,99,77,44,55,88,77,99,0,22,.55,66,77,951,753,850];
-
+        // let arr = [1,2,3,4,5];
         let sortingArr = arr.sort((a, b) => a - b);
         let count = 0;
         let occurrences = {};
@@ -44,21 +44,23 @@
         
         // without duplicacy
         let newarr=[];
-        for(let i=0;i<sortingArr.length ; i++){
-            while (i < sortingArr.length - 1 && sortingArr[i] === sortingArr[i + 1]) {
-                i++;
+        if(sortingArr.length > 3){
+            for(let i=0;i<sortingArr.length ; i++){
+                while (i < sortingArr.length - 1 && sortingArr[i] === sortingArr[i + 1]) {
+                    i++;
+                }
+                if(newarr.length < 3){
+                    newarr.push(sortingArr[i]);
+                }
             }
-            if(newarr.length < 3){
-                newarr.push(sortingArr[i]);
-            }
-        }
-        for(let i=sortingArr.length-1;i>=0; i--){
-            console.log(sortingArr[i]);
-            while(i > 0 && sortingArr[i] === sortingArr[i - 1]) {
-                i--;
-            }
-            if(newarr.length < 6){
-                newarr.push(sortingArr[i]);
+            for(let i=sortingArr.length-1;i>=0; i--){
+                console.log(sortingArr[i]);
+                while(i > 0 && sortingArr[i] === sortingArr[i - 1]) {
+                    i--;
+                }
+                if(newarr.length < 6){
+                    newarr.push(sortingArr[i]);
+                }
             }
         }
         let newarrSort = newarr.sort((a,b)=>a-b);

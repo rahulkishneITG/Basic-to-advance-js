@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter Animation</title>
+  <style>
+    #counter1, #counter2, #counter3 {
+      font-size: 2em;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="counter1">Counter 1: 0</div>
+  <div id="counter2">Counter 2: 0</div>
+  <div id="counter3">Counter 3: 0</div>
+
+  <script>
+    window.onload = function() {
+      const target1 = 5000;
+      const target2 = 300;
+      const target3 = 4.8;
+
+      const totalTime = 2000; 
+
+      const startTime = performance.now();
+
+      const counter1Element = document.getElementById("counter1");
+      const counter2Element = document.getElementById("counter2");
+      const counter3Element = document.getElementById("counter3");
+
+      function updateCounters() {
+
+        const elapsedTime = performance.now() - startTime;
+
+        if (elapsedTime >= totalTime) {
+          counter1Element.textContent = "Counter 1: " + target1;
+          counter2Element.textContent = "Counter 2: " + target2;
+          counter3Element.textContent = "Counter 3: " + target3;
+          return;
+        }
+
+        const progress = elapsedTime / totalTime;
+        const current1 = target1 * progress;
+        const current2 = target2 * progress;
+        const current3 = target3 * progress;
+
+        counter1Element.textContent = "Counter 1: " + current1.toFixed(0);
+        counter2Element.textContent = "Counter 2: " + current2.toFixed(0);
+        counter3Element.textContent = "Counter 3: " + current3.toFixed(1);
+
+        requestAnimationFrame(updateCounters);
+      }
+
+      updateCounters();
+    }
+  </script>
+</body>
+</html>

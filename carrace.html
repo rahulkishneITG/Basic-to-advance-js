@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Car Race Game</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #333;
+        }
+
+        .game-container {
+            position: relative;
+            width: 300px;
+            height: 500px;
+            background-color: #555;
+            overflow: hidden;
+        }
+
+        .car {
+            position: absolute;
+            bottom: 20px;
+            left: 125px;
+            width: 50px;
+            height: 80px;
+            background: #ff0000;
+            background-size: cover;
+        }
+
+        .obstacle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: blue;
+        }
+
+        .score-board {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <div class="car" id="car"></div>
+        <div class="score-board">
+            <span>Points: <span id="points">0</span></span>
+            <span>Level: <span id="level">1</span></span>
+        </div>
+    </div>
+    <script>
+        const car = document.getElementById("car");
+        const gameContainer = document.querySelector(".game-container");
+        const pointsDisplay = document.getElementById("points");
+        const levelDisplay = document.getElementById("level");
+
+        let carLeft = 125; 
+        let points = 0;
+        let level = 1;
+        let obstacleSpeed = 5;
+        let gameOver = false;
+        let obstacleSpawnRate = 2000; 
+
+        document.addEventListener("keydown", (e) => {
+            if (gameOver) return;
+
+            if (e.key === "ArrowLeft" && carLeft > 0) {
+                carLeft -= 10;
+            } else if (e.key === "ArrowRight" && carLeft < 250) {
+                carLeft += 10;
+            }
+            car.style.left = carLeft + "px";
+        });
+
+        function createObstacle() {
+            if (gameOver) return;
+
+            for (let i = 0; i < level; i++) {
+                const obstacle = document.createElement("div");
+                obstacle.classList.add("obstacle");
+                obstacle.style.left = Math.floor(Math.random() * 250) + "px";
+                gameContainer.appendChild(obstacle);
+
+                let obstacleTop = 0;
+                const obstacleInterval = setInterval(() => {
+                    if (obstacleTop > 500) {
+                        clearInterval(obstacleInterval);
+                        gameContainer.removeChild(obstacle);
+                        addPoint(); 
+                    } else if (
+                        obstacleTop > 420 &&
+                        carLeft < parseInt(obstacle.style.left) + 50 &&
+                        carLeft + 50 > parseInt(obstacle.style.left)
+                    ) {
+
+                        gameOver = true;
+                        alert("Game Over! Your final score is " + points);
+                        clearInterval(obstacleInterval);
+                    } else {
+                        obstacleTop += obstacleSpeed;
+                        obstacle.style.top = obstacleTop + "px";
+                    }
+                }, 20);
+            }
+        }
+
+        function addPoint() {
+            points++;
+            pointsDisplay.textContent = points;
+
+            if (points % 10 === 0) {
+                level++;
+                levelDisplay.textContent = level;
+                increaseDifficulty();
+            }
+        }
+
+        function increaseDifficulty() {
+            obstacleSpeed += 1; 
+            obstacleSpawnRate = Math.max(500, obstacleSpawnRate - 200); 
+        }
+
+        function startObstacleGeneration() {
+            createObstacle();
+            if (!gameOver) {
+                setTimeout(startObstacleGeneration, obstacleSpawnRate);
+            }
+        }
+
+        startObstacleGeneration();
+    </script>
+</body>
+
+</html>

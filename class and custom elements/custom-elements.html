@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Elements</title>
+</head>
+
+<body>
+    <custom-hello></custom-hello>
+    <custom-greet name="John"></custom-greet>
+    <custom-counter count="0"></custom-counter>
+    <custom-slot>
+        <p slot="content">This is slotted content.</p>
+    </custom-slot>
+    <button id="countButton">Count</button>
+    <script>
+        class HelloElement extends HTMLElement {
+            constructor() {
+                super();
+                this.innerHTML = "<h1>Hello World!</h1>";
+            }
+        }
+        customElements.define("custom-hello", HelloElement);
+
+        class GreetElement extends HTMLElement {
+            constructor() {
+                super();
+            }
+
+            connectedCallback() {
+                const name = this.getAttribute("name") || "Guest";
+                this.innerHTML = `<p>Hello, ${name}!</p>`;
+            }
+        }
+
+        customElements.define("custom-greet", GreetElement);
+
+        class CounterElement extends HTMLElement {
+            static get observedAttributes() {
+                return ["count"];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {
+                if (name === "count") {
+                    this.innerHTML = `<p>Count: ${newValue}</p>`;
+                }
+            }
+        }
+
+        customElements.define("custom-counter", CounterElement);
+
+        class SlotElement extends HTMLElement {
+            constructor() {
+                super();
+                const shadow = this.attachShadow({ mode: "open" });
+                shadow.innerHTML = ` <slot name="content">Hello</slot>`;
+            }
+        }
+
+        customElements.define("custom-slot", SlotElement);
+        document.getElementById("countButton").addEventListener("click", function () {
+            const counterElement = document.querySelector("custom-counter");
+            let currentCount = parseInt(counterElement.getAttribute("count"));
+            counterElement.setAttribute("count", currentCount + 1);
+        });
+    </script>
+</body>
+
+</html>

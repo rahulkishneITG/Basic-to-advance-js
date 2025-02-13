@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Related to Class And Custom Elements</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .task-manager {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #task-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    #task-form input,
+    #task-form textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #task-form button {
+      padding: 10px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #task-form button:hover {
+      background: #218838;
+    }
+
+    #task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .task {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff3e0;
+      transition: all 0.3s ease;
+    }
+
+    .task.completed {
+      background: #e8f5e9;
+    }
+
+    .task h3 {
+      margin: 0;
+      color: #ff9800;
+    }
+
+    .task.completed h3 {
+      color: #4caf50;
+    }
+
+    .task p {
+      margin: 5px 0 0;
+      color: #555;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .task-actions button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .task-actions button.complete-btn {
+      background: #4caf50;
+      color: white;
+    }
+
+    .task-actions button.complete-btn:hover {
+      background: #45a049;
+    }
+
+    .task-actions button.delete-btn {
+      background: #f44336;
+      color: white;
+    }
+
+    .task-actions button.delete-btn:hover {
+      background: #e53935;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .task {
+      animation: fadeIn 0.5s ease;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="task-manager">
+    <h1>Task Manager</h1>
+    <form id="task-form">
+      <input type="text" id="task-title" placeholder="Task Title" required>
+      <textarea id="task-description" placeholder="Task Description"></textarea>
+      <button type="submit">Add Task</button>
+    </form>
+    <div id="task-list"></div>
+  </div>
+  <script>
+
+    class Task {
+      constructor(title, description) {
+        this.title = title;
+        this.description = description;
+        this.completed = false;
+      }
+
+      toggleCompletion() {
+        this.completed = !this.completed;
+      }
+    }
+
+    class TaskItem extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+      }
+
+      connectedCallback() {
+        const title = this.getAttribute("title");
+        const description = this.getAttribute("description");
+        const completed = this.getAttribute("completed") === "true";
+
+        this.shadowRoot.innerHTML = `
+      <style>
+        .task {
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          background: ${completed ? "#e8f5e9" : "#fff3e0"};
+          transition: all 0.3s ease;
+        }
+        .task h3 {
+          margin: 0;
+          color: ${completed ? "#4caf50" : "#ff9800"};
+        }
+        .task p {
+          margin: 5px 0 0;
+          color: #555;
+        }
+        .task-actions {
+          display: flex;
+          gap: 10px;
+          margin-top: 10px;
+        }
+        .task-actions button {
+          padding: 5px 10px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background 0.3s ease;
+        }
+        .task-actions button.complete-btn {
+          background: #4caf50;
+          color: white;
+        }
+        .task-actions button.complete-btn:hover {
+          background: #45a049;
+        }
+        .task-actions button.delete-btn {
+          background: #f44336;
+          color: white;
+        }
+        .task-actions button.delete-btn:hover {
+          background: #e53935;
+        }
+      </style>
+      <div class="task ${completed ? "completed" : ""}">
+        <h3>${title}</h3>
+        <p>${description}</p>
+        <div class="task-actions">
+          <button class="complete-btn">${completed ? "Undo" : "Complete"}</button>
+          <button class="delete-btn">Delete</button>
+        </div>
+      </div>
+    `;
+
+        const completeBtn = this.shadowRoot.querySelector(".complete-btn");
+        const deleteBtn = this.shadowRoot.querySelector(".delete-btn");
+
+        completeBtn.addEventListener("click", () => {
+          this.toggleCompletion();
+        });
+
+        deleteBtn.addEventListener("click", () => {
+          this.dispatchEvent(new CustomEvent("delete-task", { bubbles: true }));
+        });
+      }
+
+      toggleCompletion() {
+        const taskDiv = this.shadowRoot.querySelector(".task");
+        const completeBtn = this.shadowRoot.querySelector(".complete-btn");
+        const isCompleted = taskDiv.classList.toggle("completed");
+
+        completeBtn.textContent = isCompleted ? "Undo" : "Complete";
+        this.setAttribute("completed", isCompleted);
+
+        this.dispatchEvent(
+          new CustomEvent("toggle-completion", { bubbles: true })
+        );
+      }
+    }
+
+    customElements.define("task-item", TaskItem);
+
+    class TaskManager {
+      constructor() {
+        this.tasks = [];
+        this.taskList = document.getElementById("task-list");
+        this.taskForm = document.getElementById("task-form");
+
+
+        this.loadTasks();
+
+        this.taskForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const title = document.getElementById("task-title").value;
+          const description = document.getElementById("task-description").value;
+          this.addTask(title, description);
+          this.taskForm.reset();
+        });
+      }
+
+      addTask(title, description) {
+        const task = new Task(title, description);
+        this.tasks.push(task);
+        this.saveTasks();
+        this.renderTasks();
+      }
+
+      renderTasks() {
+        this.taskList.innerHTML = "";
+        this.tasks.forEach((task, index) => {
+          const taskItem = document.createElement("task-item");
+          taskItem.setAttribute("title", task.title);
+          taskItem.setAttribute("description", task.description);
+          taskItem.setAttribute("completed", task.completed);
+
+          taskItem.addEventListener("toggle-completion", () => {
+            task.toggleCompletion();
+            this.saveTasks();
+          });
+
+          taskItem.addEventListener("delete-task", () => {
+            this.tasks.splice(index, 1);
+            this.saveTasks();
+            this.renderTasks();
+          });
+
+          this.taskList.appendChild(taskItem);
+        });
+      }
+
+      saveTasks() {
+        localStorage.setItem("tasks", JSON.stringify(this.tasks));
+      }
+
+      loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        this.tasks = tasks.map(
+          (task) => new Task(task.title, task.description, task.completed)
+        );
+        this.renderTasks();
+      }
+    }
+
+    const taskManager = new TaskManager();
+  </script>
+  <!-- <script>
+    without functionallity add completed and delete
+        class Task {
+            constructor(title, description) {
+                this.title = title;
+                this.description = description;
+                this.completed = false;
+            }
+
+            toggleCompletion() {
+                this.completed = !this.completed;
+            }
+        }
+
+        class TaskItem extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: "open" });
+            }
+
+            connectedCallback() {
+                const title = this.getAttribute("title");
+                const description = this.getAttribute("description");
+                const completed = this.getAttribute("completed") === "true";
+
+                this.shadowRoot.innerHTML = `
+                        <style>
+                            .task {
+                            padding: 10px;
+                            border: 1px solid #ccc;
+                            border-radius: 4px;
+                            background: ${completed ? "#e8f5e9" : "#fff3e0"};
+                            }
+                            .task h3 {
+                            margin: 0;
+                            color: ${completed ? "#4caf50" : "#ff9800"};
+                            }
+                            .task p {
+                            margin: 5px 0 0;
+                            color: #555;
+                            }
+                        </style>
+                        <div class="task">
+                            <h3>${title}</h3>
+                            <p>${description}</p>
+                        </div>
+                        `;
+            }
+        }
+
+        customElements.define("task-item", TaskItem);
+
+        class TaskManager {
+            constructor() {
+                this.tasks = [];
+                this.taskList = document.getElementById("task-list");
+                this.taskForm = document.getElementById("task-form");
+
+                this.taskForm.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    const title = document.getElementById("task-title").value;
+                    const description = document.getElementById("task-description").value;
+                    this.addTask(title, description);
+                    this.taskForm.reset();
+                });
+            }
+
+            addTask(title, description) {
+                const task = new Task(title, description);
+                this.tasks.push(task);
+                this.renderTasks();
+            }
+
+            renderTasks() {
+                this.taskList.innerHTML = "";
+                this.tasks.forEach((task, index) => {
+                    const taskItem = document.createElement("task-item");
+                    taskItem.setAttribute("title", task.title);
+                    taskItem.setAttribute("description", task.description);
+                    taskItem.setAttribute("completed", task.completed);
+                    this.taskList.appendChild(taskItem);
+                });
+            }
+        }
+        const taskManager = new TaskManager();
+    </script> -->
+</body>
+
+</html>
