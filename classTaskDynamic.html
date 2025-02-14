@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Library System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <!-- Header -->
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">📚 Book Library System</h1>
+
+        <!-- Create Book Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Create a New Book</h2>
+            <div class="space-y-4">
+                <input type="text" id="title" placeholder="Enter Book Title"
+                    class="w-full p-2 border border-gray-300 rounded-lg">
+                <input type="text" id="author" placeholder="Enter Author Name"
+                    class="w-full p-2 border border-gray-300 rounded-lg">
+                <input type="number" id="year" placeholder="Enter Publication Year"
+                    class="w-full p-2 border border-gray-300 rounded-lg">
+                <button onclick="createBook()"
+                    class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">Create Book</button>
+            </div>
+        </div>
+
+        <!-- Library Methods Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Library Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button onclick="addBookToLibrary()"
+                    class="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600">Add Book to Library</button>
+                <button onclick="removeBookFromLibrary()"
+                    class="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600">Remove Book by Title</button>
+                <button onclick="listBooksInLibrary()"
+                    class="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600">List All Books</button>
+                <button onclick="findBookInLibrary()"
+                    class="bg-yellow-500 text-white p-2 rounded-lg hover:bg-yellow-600">Find Book by Title</button>
+                <button onclick="getBookInfoFromLibrary()"
+                    class="bg-indigo-500 text-white p-2 rounded-lg hover:bg-indigo-600">Get Book Info by Title</button>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Output</h2>
+            <div id="output" class="text-gray-700"></div>
+        </div>
+
+        <!-- Dropdown to show books in the library -->
+        <div class="bg-white p-6 rounded-lg shadow-md mt-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Books in Library</h2>
+            <select id="bookDropdown" class="w-full p-2 border border-gray-300 rounded-lg">
+                <option value="">Select a book</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        class Book {
+            constructor(title, author, year) {
+                this.title = title;
+                this.author = author;
+                this.year = year;
+            }
+
+            getInfo() {
+                return `${this.title} by ${this.author}, published in ${this.year}`;
+            }
+        }
+
+        class Library {
+            constructor() {
+                this.books = [];
+            }
+
+            addBook(book) {
+                this.books.push(book);
+                this.showOutput(`✅ Book <strong>"${book.title}"</strong> added to the library.`);
+                this.updateDropdown();
+            }
+
+            removeBook(title) {
+                const index = this.books.findIndex(book => book.title === title);
+                if (index !== -1) {
+                    this.books.splice(index, 1);
+                    this.showOutput(`❌ Book <strong>"${title}"</strong> removed from the library.`);
+                    this.updateDropdown();
+                } else {
+                    this.showOutput(`⚠️ Book <strong>"${title}"</strong> not found in the library.`);
+                }
+            }
+
+            listBooks() {
+                if (this.books.length === 0) {
+                    this.showOutput("📭 No books available in the library.");
+                } else {
+                    let output = "📚 Books available in the library:<br>";
+                    this.books.forEach(book => output += `- ${book.getInfo()}<br>`);
+                    this.showOutput(output);
+                }
+            }
+
+            findBook(title) {
+                const book = this.books.find(book => book.title === title);
+                if (book) {
+                    return book;
+                } else {
+                    this.showOutput(`⚠️ Book <strong>"${title}"</strong> not found in the library.`);
+                    return null;
+                }
+            }
+
+            getBookInfo(title) {
+                const book = this.findBook(title);
+                if (book) {
+                    this.showOutput(`📖 Book Info: ${book.getInfo()}`);
+                }
+            }
+
+            showOutput(message) {
+                document.getElementById("output").innerHTML = message;
+            }
+
+            updateDropdown() {
+                const dropdown = document.getElementById("bookDropdown");
+                dropdown.innerHTML = "<option value=''>Select a book</option>";
+                this.books.forEach(book => {
+                    const option = document.createElement("option");
+                    option.value = book.title;
+                    option.textContent = book.getInfo();
+                    dropdown.appendChild(option);
+                });
+            }
+        }
+
+        // Create a global library instance
+        const library = new Library();
+
+        // Function to create a book from input fields
+        function createBook() {
+            let titleInput = document.getElementById("title");
+            let authorInput = document.getElementById("author");
+            let yearInput = document.getElementById("year");
+
+            let title = titleInput.value;
+            let author = authorInput.value;
+            let year = yearInput.value;
+
+            if (title && author && year) {
+                const book = new Book(title, author, year);
+                library.showOutput(`📘 Book created: ${book.getInfo()}`);
+
+                // Clear input fields
+                titleInput.value = "";
+                authorInput.value = "";
+                yearInput.value = "";
+
+                return book;
+            } else {
+                library.showOutput("⚠️ Please fill all fields to create a book.");
+                return null;
+            }
+        }
+
+        // Function to add a book to the library
+        function addBookToLibrary() {
+            const book = createBook();
+            if (book) {
+                library.addBook(book);
+            }
+        }
+
+        // Function to remove a book from the library
+        function removeBookFromLibrary() {
+            const title = prompt("Enter the title of the book to remove:");
+            if (title) {
+                library.removeBook(title);
+            }
+        }
+
+        // Function to list all books in the library
+        function listBooksInLibrary() {
+            library.listBooks();
+        }
+
+        // Function to find a book in the library
+        function findBookInLibrary() {
+            const title = prompt("Enter the title of the book to find:");
+            if (title) {
+                const book = library.findBook(title);
+                if (book) {
+                    library.showOutput(`🔍 Book found: ${book.getInfo()}`);
+                }
+            }
+        }
+
+        // Function to get book info from the library
+        function getBookInfoFromLibrary() {
+            const title = prompt("Enter the title of the book to get info:");
+            if (title) {
+                library.getBookInfo(title);
+            }
+        }
+    </script>
+</body>
+
+</html>

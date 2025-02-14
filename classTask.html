@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Task</title>
+</head>
+
+<body>
+    <script>
+        class Book {
+            constructor(title, author, year) {
+                this.title = title;
+                this.author = author;
+                this.year = year;
+            }
+
+            getInfo() {
+                return `${this.title} by ${this.author}, published in ${this.year}`;
+            }
+        }
+
+        class Library {
+            constructor() {
+                this.books = [];
+            }
+
+            addBook(book) {
+                this.books.push(book);
+                console.log(`Book "${book.title}" added to the library.`);
+            }
+
+            removeBook(title) {
+                const index = this.books.findIndex(book => book.title === title);
+                if (index !== -1) {
+                    this.books.splice(index, 1);
+                    console.log(`Book "${title}" removed from the library.`);
+                } else {
+                    console.log(`Book "${title}" not found in the library.`);
+                }
+            }
+
+            listBooks() {
+                if (this.books.length === 0) {
+                    console.log("No books available in the library.");
+                } else {
+                    console.log("Books available in the library:");
+                    this.books.forEach(book => console.log(book.getInfo()));
+                }
+            }
+
+            findBook(title) {
+                const book = this.books.find(book => book.title === title);
+                if (book) {
+                    return book;
+                } else {
+                    console.log(`Book "${title}" not found in the library.`);
+                    return null;
+                }
+            }
+
+            getBookInfo(title) {
+                const book = this.findBook(title);
+                if (book) {
+                    console.log(book.getInfo());
+                }
+            }
+        }
+
+        const library = new Library();
+
+        const book1 = new Book("The Great Gatsby", "F. Scott Fitzgerald", 1925);
+        const book2 = new Book("To Kill a Mockingbird", "Harper Lee", 1960);
+
+        library.addBook(book1);
+        library.addBook(book2);
+
+        library.listBooks();
+
+        library.getBookInfo("The Great Gatsby");
+
+        library.removeBook("To Kill a Mockingbird");
+
+        library.listBooks();
+    </script>
+</body>
+
+</html>
