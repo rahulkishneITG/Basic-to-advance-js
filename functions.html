@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions</title>
+</head>
+
+<body>
+    <p id="demo"></p>
+    <p id="demo1">0</p>
+    <button type="button" onclick="myFunction()">Count!</button>
+    <script>
+        function basicFunction() {
+            document.write("<h3>1. Basic Function:</h3>");
+            document.write("Hello from basicFunction!<br>");
+        }
+        basicFunction();
+
+        function addNumbers(a, b) {
+            let sum = a + b;
+            document.write("<h3>2. Function with Parameters:</h3>");
+            document.write(`Sum of ${a} and ${b} is ${sum}<br>`);
+        }
+        addNumbers(5, 10);
+
+
+        function greetUser(name = "Guest") {
+            document.write("<h3>3. Function with Default Parameters:</h3>");
+            document.write(`Hello, ${name}!<br>`);
+        }
+        greetUser("Alice");
+        greetUser();
+
+
+        function higherOrderFunction(func) {
+            document.write("<h3>4. Higher-Order Function:</h3>");
+            func();
+        }
+        higherOrderFunction(function () {
+            document.write("This message is from the passed-in function!<br>");
+        });
+
+        function callbackExample(name, callback) {
+            document.write("<h3>5. Callback Function:</h3>");
+            document.write(`Hello, ${name}!<br>`);
+            callback();
+        }
+        callbackExample("John", function () {
+            document.write("This is the callback function!<br>");
+        });
+
+
+        function createMultiplier(multiplier) {
+            return function (number) {
+                document.write("<h3>6. Closure:</h3>");
+                document.write(`${number} multiplied by ${multiplier} is ${number * multiplier}<br>`);
+            };
+        }
+        let double = createMultiplier(2);
+        double(5);
+
+
+        function factorial(n) {
+            if (n === 0 || n === 1) {
+                return 1;
+            }
+            return n * factorial(n - 1);
+        }
+        document.write("<h3>7. Recursion (Factorial):</h3>");
+        document.write(`Factorial of 5 is ${factorial(5)}<br>`);
+
+        const arrowFunctionExample = (name) => {
+            document.write("<h3>8. Arrow Function:</h3>");
+            document.write(`Hello from an arrow function, ${name}!<br>`);
+        };
+        arrowFunctionExample("Bob");
+
+        const personss = {
+            fullname: function (city, country) {
+                return this.firstname + " " + this.lastname + "," + city + "," + country;
+            }
+        }
+        const person1 = {
+            firstname: "rahul",
+            lastname: "kishne",
+        }
+        const person2 = {
+            firstname: "mohit",
+            lastname: "malli",
+        }
+        document.write("<h3>9. Call function:</h3>", personss.fullname.call(person1));
+        document.write("<h3>10. Apply function:</h3>", personss.fullname.apply(person2, ["Oslo", "Norway"]));
+
+        // const person = {
+        //     firstName: "John",
+        //     lastName: "Doe",
+        //     display: function () {
+        //         return this.firstName + " " + this.lastName;
+        //     }
+        // }
+        // document.write("<h3>11. Bind function:</h3>", person.display());
+        // let display = person.display.bind(person);
+        // document.write("<h3>11. Bind function:</h3>", display());
+        const person = {
+            firstName: "John",
+            lastName: "Doe",
+            display: function () {
+                let x = document.getElementById("demo");
+                x.innerHTML = this.firstName + " " + this.lastName;
+            }
+        }
+        // if direct call then this can be lost 
+        setTimeout(person.display, 3000);
+        // after bind this will be preserved
+        let display = person.display.bind(person);
+        setTimeout(display, 3000);
+
+        // IEVF function self invoking function
+
+        (function () {
+            document.write("<h3>13. Self Invoking Function:</h3>");
+        }());
+
+        // closures in js
+        function myCounter() {
+            let counter = 0;
+            return function () {
+                counter++;
+                return counter;
+            };
+        }
+
+        const add = myCounter();
+
+        function myFunction() {
+            document.getElementById("demo1").innerHTML = add();
+        }
+    </script>
+</body>
+
+</html>
