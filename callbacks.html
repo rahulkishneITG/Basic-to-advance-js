@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Callbacks - Basic to Advanced</title>
+</head>
+<body>
+  <h1>JavaScript Callbacks - Examples</h1>
+  <script>
+    // 1. Basic Callback
+    function basicCallbackExample(callback) {
+      document.write("<h3>1. Basic Callback:</h3>");
+      callback();
+    }
+    basicCallbackExample(function() {
+      document.write("This message is from a basic callback function!<br>");
+    });
+
+    // 2. Callback with Parameters
+    function callbackWithParams(a, b, callback) {
+      let sum = a + b;
+      document.write("<h3>2. Callback with Parameters:</h3>");
+      callback(sum);
+    }
+    callbackWithParams(5, 10, function(result) {
+      document.write(`The sum is: ${result}<br>`);
+    });
+
+    // 3. Asynchronous Callback (Simulating a delay using setTimeout)
+    // function asyncCallbackExample(callback) {
+    //   document.write("<h3>3. Asynchronous Callback:</h3>");
+    //   setTimeout(function() {
+    //     document.write("This message is from an asynchronous callback!<br>");
+    //     callback();
+    //   }, 2000); // 2-second delay
+    // }
+    // asyncCallbackExample(function() {
+    //   document.write("Asynchronous callback completed!<br>");
+    // });
+
+    // 4. Callback with Error Handling
+    function callbackWithErrorHandling(data, callback, errorCallback) {
+      if (typeof data === "number") {
+        document.write("<h3>4. Callback with Error Handling:</h3>");
+        callback(data * 2);
+      } else {
+        errorCallback("Error: The provided data is not a number!");
+      }
+    }
+    callbackWithErrorHandling(10, function(result) {
+      document.write(`Result: ${result}<br>`);
+    }, function(error) {
+      document.write(`${error}<br>`);
+    });
+
+    // 5. Chained Callbacks
+    function firstStep(callback) {
+      document.write("<h3>5. Chained Callbacks:</h3>");
+      document.write("First step completed.<br>");
+      callback();
+    }
+
+    function secondStep(callback) {
+      document.write("Second step completed.<br>");
+      callback();
+    }
+
+    function thirdStep() {
+      document.write("Third step completed. All steps done!<br>");
+    }
+
+    firstStep(function() {
+      secondStep(function() {
+        thirdStep();
+      });
+    });
+
+    // 6. Multiple Callbacks (Success and Failure Scenarios)
+    function multipleCallbacksExample(data, successCallback, failureCallback) {
+      if (data === "success") {
+        document.write("<h3>6. Multiple Callbacks:</h3>");
+        successCallback("Operation was successful!");
+      } else {
+        failureCallback("Operation failed!");
+      }
+    }
+    multipleCallbacksExample("success", function(message) {
+      document.write(`${message}<br>`);
+    }, function(error) {
+      document.write(`${error}<br>`);
+    });
+  </script>
+</body>
+</html>

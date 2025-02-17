@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Promises and Async/Await</title>
+</head>
+<body>
+  <h1>JavaScript Promises and Async/Await - Examples</h1>
+  <script>
+    // 1. Basic Promise
+    function basicPromise() {
+      document.write("<h3>1. Basic Promise:</h3>");
+      let promise = new Promise((resolve, reject) => {
+        let isSuccess = true; // Change to false to simulate failure
+        if (isSuccess) {
+          resolve("Promise resolved successfully!");
+        } else {
+          reject("Promise rejected!");
+        }
+      });
+
+      promise
+        .then((message) => {
+          document.write(`${message}<br>`);
+        })
+        .catch((error) => {
+          document.write(`${error}<br>`);
+        });
+    }
+    basicPromise();
+
+    // 2. Chained Promises
+    function chainedPromises() {
+      document.write("<h3>2. Chained Promises:</h3>");
+      let promise = new Promise((resolve) => {
+        resolve(2);
+      });
+
+      promise
+        .then((result) => {
+          document.write(`Result after first step: ${result}<br>`);
+          return result * 2;
+        })
+        .then((result) => {
+          document.write(`Result after second step: ${result}<br>`);
+          return result * 2;
+        })
+        .then((result) => {
+          document.write(`Result after third step: ${result}<br>`);
+        });
+    }
+    chainedPromises();
+
+    // 3. Promise with Error Handling
+    function promiseWithErrorHandling() {
+      document.write("<h3>3. Promise with Error Handling:</h3>");
+      let promise = new Promise((resolve, reject) => {
+        let isError = true; // Change to false to simulate success
+        if (!isError) {
+          resolve("Operation successful!");
+        } else {
+          reject("Operation failed!");
+        }
+      });
+
+      promise
+        .then((message) => {
+          document.write(`${message}<br>`);
+        })
+        .catch((error) => {
+          document.write(`${error}<br>`);
+        });
+    }
+    promiseWithErrorHandling();
+
+    // 4. Async/Await - Basic Example
+    async function asyncAwaitExample() {
+      document.write("<h3>4. Async/Await - Basic Example:</h3>");
+
+      let promise = new Promise((resolve) => {
+        setTimeout(() => resolve("Data fetched successfully!"), 2000);
+      });
+
+      let result = await promise; // Wait for the promise to resolve
+      document.write(`${result}<br>`);
+    }
+    asyncAwaitExample();
+
+    // 5. Async/Await with Error Handling
+    async function asyncAwaitWithErrorHandling() {
+      document.write("<h3>5. Async/Await with Error Handling:</h3>");
+
+      let promise = new Promise((resolve, reject) => {
+        let isSuccess = false; // Change to true to simulate success
+        setTimeout(() => {
+          if (isSuccess) {
+            resolve("Async operation completed successfully!");
+          } else {
+            reject("Async operation failed!");
+          }
+        }, 2000);
+      });
+
+      try {
+        let result = await promise;
+        document.write(`${result}<br>`);
+      } catch (error) {
+        document.write(`${error}<br>`);
+      }
+    }
+    asyncAwaitWithErrorHandling();
+
+    // 6. Parallel Execution with Promise.all
+    async function parallelExecution() {
+      document.write("<h3>6. Parallel Execution with Promise.all:</h3>");
+
+      let promise1 = new Promise((resolve) => {
+        setTimeout(() => resolve("Promise 1 resolved"), 1000);
+      });
+
+      let promise2 = new Promise((resolve) => {
+        setTimeout(() => resolve("Promise 2 resolved"), 2000);
+      });
+
+      let promise3 = new Promise((resolve) => {
+        setTimeout(() => resolve("Promise 3 resolved"), 3000);
+      });
+
+      try {
+        let results = await Promise.all([promise1, promise2, promise3]);
+        results.forEach((result, index) => {
+          document.write(`Result ${index + 1}: ${result}<br>`);
+        });
+      } catch (error) {
+        document.write(`Error: ${error}<br>`);
+      }
+    }
+    parallelExecution();
+  </script>
+</body>
+</html>
